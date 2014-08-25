@@ -1,0 +1,9 @@
+C:\Users\atleholm\Documents\stash_prosjekter\SCO Integration Packs\SPLASHClient\webrequestor\obj\Debug\WebRequestor.csprojResolveAssemblyReference.cache
+C:\Users\atleholm\Documents\stash_prosjekter\SCO Integration Packs\SPLASHClient\webrequestor\bin\Debug\webrequestor.dll
+C:\Users\atleholm\Documents\stash_prosjekter\SCO Integration Packs\SPLASHClient\webrequestor\bin\Debug\webrequestor.pdb
+C:\Users\atleholm\Documents\stash_prosjekter\SCO Integration Packs\SPLASHClient\webrequestor\bin\Debug\Newtonsoft.Json.dll
+C:\Users\atleholm\Documents\stash_prosjekter\SCO Integration Packs\SPLASHClient\webrequestor\bin\Debug\splashmodels.dll
+C:\Users\atleholm\Documents\stash_prosjekter\SCO Integration Packs\SPLASHClient\webrequestor\bin\Debug\splashmodels.pdb
+C:\Users\atleholm\Documents\stash_prosjekter\SCO Integration Packs\SPLASHClient\webrequestor\bin\Debug\Newtonsoft.Json.xml
+C:\Users\atleholm\Documents\stash_prosjekter\SCO Integration Packs\SPLASHClient\webrequestor\obj\Debug\webrequestor.dll
+C:\Users\atleholm\Documents\stash_prosjekter\SCO Integration Packs\SPLASHClient\webrequestor\obj\Debug\webrequestor.pdb
