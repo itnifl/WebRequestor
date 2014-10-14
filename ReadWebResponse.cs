@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using splashmodels;
 
 namespace WebRequestor {
    public class ReadWebResponse {

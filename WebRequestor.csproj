@@ -29,6 +29,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -51,7 +54,7 @@
     <Compile Include="XmlReader.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Splash\API\splashmodels\splashmodels.csproj">
+    <ProjectReference Include="..\Splash\API\splashmodels\splashmodels.csproj">
       <Project>{e31b1a98-5a5e-4a24-b588-2fde013326bc}</Project>
       <Name>splashmodels</Name>
     </ProjectReference>
