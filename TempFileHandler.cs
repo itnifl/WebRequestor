@@ -13,8 +13,8 @@ namespace WebRequestor {
             fileName = Path.GetTempFileName();
             FileInfo fileInfo = new FileInfo(fileName);
             fileInfo.Attributes = FileAttributes.Temporary;
-         } catch (Exception ex) {
-            throw ex;
+         } catch {
+            throw;
          }
          return fileName;
       }
@@ -22,10 +22,8 @@ namespace WebRequestor {
          StreamWriter streamWriter = File.AppendText(tmpFile);
          try {
             streamWriter.WriteLine(txtUpdate);
-         } catch (Exception ex) {
-            streamWriter.Flush();
-            streamWriter.Close();
-            throw ex;
+         } catch {
+            throw;
          } finally {
             streamWriter.Flush();
             streamWriter.Close();
@@ -37,8 +35,8 @@ namespace WebRequestor {
             StreamReader myReader = File.OpenText(tmpFile);
             returnString = myReader.ReadToEnd();
             myReader.Close();
-         } catch (Exception ex) {
-            throw ex;
+         } catch {
+            throw;
          }
          return returnString;
       }
@@ -54,8 +52,8 @@ namespace WebRequestor {
             if (File.Exists(tmpFile)) {
                File.Delete(tmpFile);               
             }
-         } catch (Exception ex) {
-            throw ex;
+         } catch {
+            throw;
          }
       }
       protected static bool IsFileLocked(FileInfo file) {

@@ -13,3 +13,9 @@ C:\Users\atleholm\Documents\stash_prosjekter\WebRequestor\bin\Debug\Newtonsoft.J
 C:\Users\atleholm\Documents\stash_prosjekter\WebRequestor\bin\Debug\Newtonsoft.Json.xml
 C:\Users\atleholm\Documents\stash_prosjekter\WebRequestor\obj\Debug\webrequestor.dll
 C:\Users\atleholm\Documents\stash_prosjekter\WebRequestor\obj\Debug\webrequestor.pdb
+C:\TFS-PnDAUTDevMntSupport\PnDAUTDevMntSupport\HistoricStation\2.1.0\Custom Code\WebRequestor\bin\Debug\Newtonsoft.Json.xml
+C:\TFS-PnDAUTDevMntSupport\PnDAUTDevMntSupport\HistoricStation\2.1.0\Custom Code\WebRequestor\bin\Debug\webrequestor.dll
+C:\TFS-PnDAUTDevMntSupport\PnDAUTDevMntSupport\HistoricStation\2.1.0\Custom Code\WebRequestor\bin\Debug\webrequestor.pdb
+C:\TFS-PnDAUTDevMntSupport\PnDAUTDevMntSupport\HistoricStation\2.1.0\Custom Code\WebRequestor\bin\Debug\Newtonsoft.Json.dll
+C:\TFS-PnDAUTDevMntSupport\PnDAUTDevMntSupport\HistoricStation\2.1.0\Custom Code\WebRequestor\obj\Debug\webrequestor.dll
+C:\TFS-PnDAUTDevMntSupport\PnDAUTDevMntSupport\HistoricStation\2.1.0\Custom Code\WebRequestor\obj\Debug\webrequestor.pdb

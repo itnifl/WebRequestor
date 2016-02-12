@@ -9,7 +9,10 @@ using Newtonsoft.Json.Linq;
 
 namespace WebRequestor {
    public class ReadWebResponse {
-      public SendWebRequest SWR {get; set;}
+      /// <summary>
+      /// This is the SendWebRequest object we use to read a reply from
+      /// </summary>
+      public SendWebRequest SendRequest {get; private set;}
       private Status __status;
       private string __errorStatusMessage;
       private string __apiStatusMessage;
@@ -26,9 +29,9 @@ namespace WebRequestor {
       /// <param name="status">The Status enum status code before we start reading. Parameter is nullable and set to 'working' of parameter is null.</param>
       /// <param name="errorStatusMessage">String message of error before we start reading. Parameter is nullable and set to 'None' of parameter is null.</param>
       /// <param name="apiStatusMessage">String message of api error before we start reading. Parameter is nullable and set to 'None' of parameter is null.</param>            
-      public ReadWebResponse(ref SendWebRequest swr, Status? status, string errorStatusMessage = "", string apiStatusMessage = "") {
+      public ReadWebResponse(SendWebRequest swr, Status? status = Status.working, string errorStatusMessage = "", string apiStatusMessage = "") {
          if (swr.Equals(null)) throw new ArgumentException("Parameter swr cannot be null or empty", "swr");
-         this.SWR = swr;
+         this.SendRequest = swr;
          this.__status = status.HasValue ? status.Value : Status.working;
          this.__errorStatusMessage = String.IsNullOrEmpty(errorStatusMessage) ? "None" : errorStatusMessage;
          this.__apiStatusMessage = String.IsNullOrEmpty(apiStatusMessage) ? "None" : apiStatusMessage;         
@@ -39,12 +42,12 @@ namespace WebRequestor {
       /// </summary>
       /// <param name="verb">The verb to execute the SendWebRequest with; POST, GET, PUT or DELETE.</param>
       /// <returns>A dictionary with they keys errorMessage, status and answerMessage where the text is returned.</returns>
-      public Dictionary<string, string> executeTextRead(string verb) {
+      public Dictionary<string, string> ExecuteTextRead(RequestType verb) {
          Dictionary<string, string> returnAttributes = new Dictionary<string, string>();
          var statusArray = Enum.GetValues(typeof(Status));
          string response = "{}";
          try {
-            response = readTextReponse(verb);
+            response = ReadTextReponse(verb);
             __status = Status.done;
             __errorStatusMessage = "None";
          } catch(Exception e) {
@@ -58,16 +61,16 @@ namespace WebRequestor {
       }
 
       /// <summary>
-      /// Reads text response from the given SendWebRequest object passed to the constructor of this object using verb passed as an argument to this method and replies with JObjects in dictionaries.
+      /// Reads text response from the given SendWebRequest object passed to the constructor of this object. Uses verb argument to this method and replies with JObjects in dictionaries.
       /// </summary>
       /// <param name="verb">The verb to execute the SendWebRequest with; POST, GET, PUT or DELETE.</param>
       /// <returns>A dictionary with the keys error and answerMessage having corresponding JObjects as values. Error is a jObject with the properties errorMessage and status.</returns>
-      public Dictionary<string, JObject> executeJSONRead(string verb) {
+      public Dictionary<string, JObject> ExecuteJSONRead(RequestType verb) {
          Dictionary<string, JObject> returnAttributes = new Dictionary<string, JObject>();
          var statusArray = Enum.GetValues(typeof(Status));
          JObject response = new JObject();
          try {
-            response = JsonConvert.DeserializeObject<JObject>(readTextReponse(verb));
+            response = JsonConvert.DeserializeObject<JObject>(ReadTextReponse(verb));
             __status = Status.done;
             __errorStatusMessage = "None";
          }
@@ -79,7 +82,7 @@ namespace WebRequestor {
          errorObject.errorMessage = __errorStatusMessage;
          errorObject.status = __status.ToString();
          returnAttributes.Add("error", (JObject)errorObject);
-         returnAttributes.Add("answerMessage", response);
+         returnAttributes.Add("answerMessage", (JObject)response);
          return returnAttributes;
       }
 
@@ -92,7 +95,7 @@ namespace WebRequestor {
       /// <param name="xmlFirstRead">The XML tag that has the attribute we are looking for.</param>
       /// <param name="xmlErrorRead">The XML tag that has the error information if something fails.</param>
       /// <returns>A dictionary with the keys errorMessage, status and answerMessage.</returns>
-      public Dictionary<string, string> executeXMLRead(string fetchAttribute, string fetchErrorAttribute, string fetchErrorCodeAttribute, string xmlFirstRead, string xmlErrorRead) {
+      public Dictionary<string, string> ExecuteXMLRead(string fetchAttribute, string fetchErrorAttribute, string fetchErrorCodeAttribute, string xmlFirstRead, string xmlErrorRead, RequestType verb = RequestType.POST) {
          if (String.IsNullOrEmpty(fetchAttribute)) throw new ArgumentException("Parameter fetchAttribute cannot be null or empty", "fetchAttribute");
          this.__fetchAttributeOrTag = fetchAttribute;
          if (String.IsNullOrEmpty(fetchErrorAttribute)) throw new ArgumentException("Parameter fetchErrorAttribute cannot be null or empty", "fetchErrorAttribute");
@@ -106,7 +109,7 @@ namespace WebRequestor {
          
          Dictionary<string, string> returnAttributes = new Dictionary<string, string>();
          var statusArray = Enum.GetValues(typeof(Status));
-         string responseText = readTextReponse("POST");
+         string responseText = ReadTextReponse(verb);
 
          try {
             string tmpFilename = TempFileHandler.CreateTmpFile();
@@ -148,27 +151,27 @@ namespace WebRequestor {
       /// </summary>
       /// <param name="verb">The verb to execute the SendWebRequest with; POST, GET, PUT or DELETE.</param>
       /// <returns>String response read by this reader.</returns>
-      private String readTextReponse(string verb) {
+      private String ReadTextReponse(RequestType verb, bool ssl = false) {
          string responseText = "";
-         verb = verb.ToUpper();
          HttpWebResponse swrResponse;
          switch(verb) {
-            case "POST":
-                swrResponse = SWR.executePost(new Dictionary<string, string>());
+            case RequestType.POST:
+               SendRequest.WebRequestType = RequestType.POST;
+               swrResponse = ssl ? SendRequest.Execute(new Dictionary<string, string>(), true) : SendRequest.Execute(new Dictionary<string, string>(), false);
                 break;
             default:
                 return "{error: 'Wrong or not implemented verb passed to readTextReponse method: " + verb + "'}";
          }
-         
-         Stream receiveStream = swrResponse.GetResponseStream();
-         Encoding encode = System.Text.Encoding.GetEncoding("utf-8");
-         StreamReader readStream = new StreamReader(receiveStream, encode);
 
-         using (readStream) {
-            responseText = readStream.ReadToEnd();
+         using (Stream receiveStream = swrResponse.GetResponseStream()) {
+            Encoding encode = System.Text.Encoding.GetEncoding("utf-8");
+            StreamReader readStream = new StreamReader(receiveStream, encode);
+
+            using (readStream) {
+               responseText = readStream.ReadToEnd();
+            }
+            swrResponse.Close();
          }
-         swrResponse.Close();
-         readStream.Close();
          return responseText;
       }
    }
