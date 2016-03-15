@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Xml;
+using System.Runtime.Serialization;
 
 namespace WebRequestor {
    public class ReadWebResponse {
@@ -145,6 +147,24 @@ namespace WebRequestor {
          returnAttributes.Add("answerMessage", __apiStatusMessage);
          return returnAttributes;
       }
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <typeparam name="T">The object we want to deserialize a xml response to</typeparam>
+      /// <param name="verb">The verb we are using when talking with the web solution</param>
+      /// <returns>The instance of object T</returns>
+      public T DeserializeXML<T>(RequestType verb) {
+         string responseText = ReadTextReponse(verb);
+         ASCIIEncoding encoding = new ASCIIEncoding();
+         byte[] data = encoding.GetBytes(responseText);
+         DataContractSerializer dcs = new DataContractSerializer(typeof(T));
+         T returnObject;
+         using (XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(data, new XmlDictionaryReaderQuotas())) {
+            returnObject = (T)dcs.ReadObject(reader);
+            reader.Close();
+         }
+         return returnObject;
+      }
 
       /// <summary>
       /// Read text response from SendWebRequest object.
@@ -159,6 +179,10 @@ namespace WebRequestor {
                SendRequest.WebRequestType = RequestType.POST;
                swrResponse = ssl ? SendRequest.Execute(new Dictionary<string, string>(), true) : SendRequest.Execute(new Dictionary<string, string>(), false);
                 break;
+            case RequestType.GET:
+               SendRequest.WebRequestType = RequestType.GET;
+               swrResponse = ssl ? SendRequest.Execute(new Dictionary<string, string>(), true) : SendRequest.Execute(new Dictionary<string, string>(), false);
+               break;
             default:
                 return "{error: 'Wrong or not implemented verb passed to readTextReponse method: " + verb + "'}";
          }

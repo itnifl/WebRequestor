@@ -30,6 +30,9 @@ namespace WebRequestor {
       /// Data type of payload being sent
       /// </summary>
       public string ContentType {get; set;}
+      /// <summary>
+      /// Must be set if you want something other then POST
+      /// </summary>
       public RequestType WebRequestType { get; set; } = RequestType.POST;
 
       /// <summary>
@@ -98,13 +101,14 @@ namespace WebRequestor {
                                        return true; // **** Always accept SSL Certificate
                                     };
 
-
-         using (Stream newStream = firstRequest.GetRequestStream()) { 
-            newStream.ReadTimeout = 8000;
-            newStream.WriteTimeout = 8000;
-            newStream.Write(data, 0, dataLength);
+         if (WebRequestType == RequestType.POST) {
+            using (Stream newStream = firstRequest.GetRequestStream()) {
+               newStream.ReadTimeout = 8000;
+               newStream.WriteTimeout = 8000;
+               newStream.Write(data, 0, dataLength);
+            }
          }
-         
+        
          return (HttpWebResponse)firstRequest.GetResponse();
       }
    }
